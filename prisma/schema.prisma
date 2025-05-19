@@ -15,7 +15,19 @@ datasource db {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
+  id Int @default(autoincrement()) @id //@id decorator defines a primary key
   username String @unique
   displayName String? //optional
+}
+
+model UserSetting {
+  id Int @default(autoincrement()) @id
+  notificationsOn Boolean 
+  smsEnabled Boolean
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+  title String
+  description String
 }
