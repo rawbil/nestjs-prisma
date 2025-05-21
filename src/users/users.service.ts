@@ -26,9 +26,22 @@ export class UsersService {
     async updateUser(id: number, data: UpdateUserDto ) {
         const user = await this.prisma.user.findUnique({where: {id}});
         if(!user) throw new NotFoundException(`User with id: ${id} not found`);
+
+        //since username is unique, we need to see if the same username is provided again
+        if(data.username) {
+            const findUser = await this.prisma.user.findUnique({where: {username: data.username as string}});
+            if(findUser) throw new HttpException(`username: ${data.username} already exists`, 409);
+        }
         return this.prisma.user.update({
             where: { id },
             data,
         })
+    }
+
+    async deleteUser(id: number) {
+         await this.getUserById(id);
+         await this.prisma.user.delete({where: {id}});
+         return await this.prisma.user.findMany();
+         
     }
 }

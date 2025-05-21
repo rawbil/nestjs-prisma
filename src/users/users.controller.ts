@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dtos/CreateUser.dto';
@@ -30,5 +30,10 @@ export class UsersController {
    // @UsePipes(ValidationPipe, ParseIntPipe)
     async updateUser(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) updatedUser: UpdateUserDto) {
         return await this.usersService.updateUser(id, updatedUser);
+    }
+
+    @Delete(':id') //DELETE /users/:id
+    deleteUser(@Param('id', ParseIntPipe) id: number) {
+        return this.usersService.deleteUser(id);
     }
 } 
