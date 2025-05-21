@@ -21,11 +21,12 @@ export class UsersController {
 
     @Get(':id') //GET /users/:id
     @UsePipes(ParseIntPipe)
-    getUserById(@Param('id') id: number) {
-        return this.usersService.getUserById(id);
+   async getUserById(@Param('id') id: number) {
+        return await this.usersService.getUserById(id);
+        
     }
 
-    @Patch(':id')
+    @Patch(':id/update-user')
    // @UsePipes(ValidationPipe, ParseIntPipe)
     async updateUser(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) updatedUser: UpdateUserDto) {
         return await this.usersService.updateUser(id, updatedUser);

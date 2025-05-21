@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
@@ -16,12 +16,15 @@ export class UsersService {
         return this.prisma.user.findMany()
     }
 
-    getUserById(id: number) {
-        return this.prisma.user.findUnique({where: {id}})
+    async getUserById(id: number) {
+        const user = await this.prisma.user.findUnique({where: {id}});
+        if(!user) throw new HttpException("User not found", 404);
+        console.log(user);
+        return user;
     }
 
-    updateUser(id: number, data: UpdateUserDto ) {
-        const user = this.prisma.user.findUnique({where: {id}});
+    async updateUser(id: number, data: UpdateUserDto ) {
+        const user = await this.prisma.user.findUnique({where: {id}});
         if(!user) throw new NotFoundException(`User with id: ${id} not found`);
         return this.prisma.user.update({
             where: { id },
