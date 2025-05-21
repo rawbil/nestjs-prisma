@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { UpdateUserDto } from './dtos/UpdateUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -23,4 +24,10 @@ export class UsersController {
     getUserById(@Param('id') id: number) {
         return this.usersService.getUserById(id);
     }
-}
+
+    @Patch(':id')
+    @UsePipes(ValidationPipe, ParseIntPipe)
+    async updateUser(@Param('id') id: number, @Body() updatedUser: UpdateUserDto) {
+        return await this.usersService.updateUser(id, updatedUser);
+    }
+} 
