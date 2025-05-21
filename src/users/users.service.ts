@@ -11,7 +11,13 @@ export class UsersService {
        return this.prisma.user.create({data})
     }
 
-    getUsers() {}
+    getUsers() {
+        return this.prisma.user.findMany()
+    }
 
-    getUserById() {}
+    getUserById(id: number) {
+        return this.prisma.user.findUnique({where: {id}})
+    }
+
+    updateUser(id: number, )
 }
